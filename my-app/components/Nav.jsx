@@ -1,13 +1,25 @@
 "use client"
+import { getProviders, signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-
+import { useEffect, useState } from "react";
+import "../styles/globals.css";
 const Nav = () => {
 
   const isUserLoggedIn = true;
+  const [providers , setProviders]=useState(null);
+
+  useEffect(() => {
+    const setProviders = async() => {
+      const response = await getProviders();
+
+      setProviders(response);
+    }
+    setProviders();
+  })
 
   return (
-    <nav className="flex-between w-full mb-16 pt-3">
+    <nav className="flex-between  w-full mb-16 pt-3 ">
       <Link href="/" className="flex gap-2 flex-center">
       <Image src="/assets/images/logo.svg" 
           width={30} 
@@ -17,7 +29,7 @@ const Nav = () => {
         />
         <p className="logo_text">Promptopia</p>
       </Link>
-      {/* Mobile Navigation */}
+      {/* Desktop Navigation */}
       <div className="sm:flex hidden">
         {isUserLoggedIn ? (
           <div className="flex gap-3 gap-5">
@@ -25,9 +37,15 @@ const Nav = () => {
             className="black_btn">
               Create Post
             </Link>
+            <button type="button" onClick={signOut} className="outline_btn">Sign Out</button>
+
+            <Link href="/profile">
+            <Image src="/assets/images/logo.svg" width={37} height={37}className="rounded-full" alt="profile"/>
+            </Link>
           </div>
         ): (
-          <div></div>
+          <>
+          </>
         )}
       </div>
     </nav>
